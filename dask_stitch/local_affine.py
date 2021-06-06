@@ -69,7 +69,7 @@ def local_affines_to_field(
         trim=False,
         align_arrays=False,
         dtype=np.float32,
-        drop_axis=[1,],#[4,],
+        drop_axis=[0,1,],#[4,],
         chunks=blocksize_with_overlaps+(3,),
     )
 
@@ -78,7 +78,7 @@ def local_affines_to_field(
         merge_overlaps,
         fields,
         overlap=overlap,
-        depth=(0,) + tuple(overlap),#tuple(overlap) + (0,),
+        depth=tuple(overlap) + (0,),
         boundary=0.,
         trim=False,
         dtype=np.float32,
