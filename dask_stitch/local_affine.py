@@ -39,14 +39,14 @@ def local_affines_to_field(
 
     # get a coordinate grid
     grid = position_grid(
-        np.array(blocksize) * affines.shape[:3], blocksize,
+        np.array(blocksize) * affines.shape[2:], blocksize,
     )
     grid = grid * spacing.astype(np.float32)
     grid = grid[..., None]  # needed for map_overlap
 
     # wrap local_affines as dask array
     affines_da = da.from_array(
-        affines, chunks=(1, 1, 1, 4, 4),
+        affines, chunks=(4,4,1,1,1),#(1, 1, 1, 4, 4),
     )
 
     # convert to weighted fields
@@ -69,7 +69,7 @@ def local_affines_to_field(
         trim=False,
         align_arrays=False,
         dtype=np.float32,
-        drop_axis=[4,],
+        drop_axis=[1,],#[4,],
         chunks=blocksize_with_overlaps+(3,),
     )
 
@@ -78,7 +78,7 @@ def local_affines_to_field(
         merge_overlaps,
         fields,
         overlap=overlap,
-        depth=tuple(overlap) + (0,),
+        depth=(0,) + tuple(overlap),#tuple(overlap) + (0,),
         boundary=0.,
         trim=False,
         dtype=np.float32,
